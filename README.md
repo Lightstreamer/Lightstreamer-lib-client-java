@@ -28,7 +28,6 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-
   implementation("com.lightstreamer:ls-javase-client:4.3.4")
 }
 ```
@@ -52,14 +51,13 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-
   implementation("com.lightstreamer:ls-android-client:4.2.2")
 }
 ```
 
 ## Quickstart
 
-To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/latest/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
+To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on *https://push.lightstreamer.com* will look like this:
 
 ```java
@@ -67,7 +65,7 @@ LightstreamerClient client = new LightstreamerClient("https://push.lightstreamer
 client.connect();
 ```
 
-For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-javase-client/latest/Subscription.html) instance is needed.
+For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/Subscription.html) instance is needed.
 A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see [Lightstreamer General Concepts](https://www.lightstreamer.com/docs/base/General%20Concepts.pdf)):
 
 ```java
@@ -79,7 +77,7 @@ sub.setRequestedSnapshot("yes");
 client.subscribe(sub);
 ```
 
-Before sending the subscription to the server, usually at least one [SubscriptionListener](https://lightstreamer.com/api/ls-javase-client/latest/SubscriptionListener.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
+Before sending the subscription to the server, usually at least one [SubscriptionListener](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/SubscriptionListener.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
 
 ```java
 sub.addListener(new SubscriptionListener() {
@@ -98,7 +96,7 @@ Before you can use MPN services, you need to
 - create a Firebase project to connect to your Android app (read carefully the Firebase documentation about [Set up a Firebase Cloud Messaging client app on Android](https://firebase.google.com/docs/cloud-messaging/android/client));
 - configure the Lightstreamer MPN module (read carefully the section *5 Mobile and Web Push Notifications* in the [General Concepts guide](https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf)).
 
-After you have a Firebase project, you can create a [MPN device](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/mpn/android/MpnDevice.html), which represents a specific app running on a specific mobile device.
+After you have a Firebase project, you can create a [MPN device](https://lightstreamer.com/api/ls-android-client/latest/com/lightstreamer/client/mpn/android/MpnDevice.html), which represents a specific app running on a specific mobile device.
 
 ```java
 FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -112,7 +110,7 @@ FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCom
 });
 ```
 
-To receive notifications, you need to subscribe to a [MPN subscription](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/mpn/MpnSubscription.html): it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
+To receive notifications, you need to subscribe to a [MPN subscription](https://lightstreamer.com/api/ls-android-client/latest/com/lightstreamer/client/mpn/MpnSubscription.html): it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
 
 ```java
 String[] items = { "item1","item2","item3" };
@@ -139,18 +137,45 @@ As an example, you can see the class [MyFirebaseMessagingService](https://github
 
 ## Logging
 
-To enable the internal client logger, create a [LoggerProvider](https://lightstreamer.com/api/ls-javase-client/latest/SystemOutLogProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/LightstreamerClient.html).
+To enable the internal client logger, create an instance of [LoggerProvider](https://sdk.lightstreamer.com/ls-log-adapter-java/1.0.2/api/com/lightstreamer/log/LoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/LightstreamerClient.html).
+
+### Javse SE
 
 ```java
 SystemOutLogProvider loggerProvider = new SystemOutLogProvider();
 LightstreamerClient.setLoggerProvider(loggerProvider);
 ```
 
+Add also these dependencies to your project:
+
+```gradle
+dependencies {
+  implementation("com.lightstreamer:ls-log-adapter-java:1.0.2")
+  implementation("com.lightstreamer:java-system-out-log:1.0.2")
+}
+```
+
+### Android
+
+```java
+AndroidLogProvider loggerProvider = new AndroidLogProvider();
+LightstreamerClient.setLoggerProvider(loggerProvider);
+```
+
+Add also these dependencies to your project:
+
+```gradle
+dependencies {
+  implementation("com.lightstreamer:ls-log-adapter-java:1.0.2")
+  implementation("com.lightstreamer:android-log-wrapper:1.0.1")
+}
+```
+
 ## Building
 
 To build the library you need:
 - JDK version 8.
-- The _Android command line tools_.
+- The *Android command line tools*.
 
 To install the Android command line tools, follow these steps:
 - [Download](https://developer.android.com/studio#command-tools) the tools package and extract it into `<your_android_sdk_root>/cmdline-tools` folder,
@@ -170,7 +195,7 @@ Then, run the Gradle `build` task:
 $ ./gradlew build
 ```
 
-After that, you can find all generated artifacts (library, javadocs, and source code) under:
+After that, you can find all generated artifacts (library, javadocs, and source code) under the folders:
 
 - `javase-lib`, for the Java SE library
 - `android-lib`, for the Android library
@@ -178,9 +203,9 @@ After that, you can find all generated artifacts (library, javadocs, and source 
 
 ## Compatibility
 
-JavaSE library requires Server 7.0.
+- **JavaSE** library: compatible with Lightstreamer Server since version 7.0.
 
-Android library requires Server 7.1.
+- **Android** library: compatible with Lightstreamer Server since version 7.1.
 
 ## Documentation
 
