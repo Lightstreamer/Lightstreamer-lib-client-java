@@ -11,9 +11,7 @@ Made the library available on [Maven Central Repository](https://mvnrepository.c
 The "compact" variant is also on [Maven Central Repository](https://mvnrepository.com/artifact/com.lightstreamer/ls-android-client-compact).
 The new location will replace the old [Lightstreamer internal repository](https://www.lightstreamer.com/repo/maven).
 Moreover, the library is now open source, available on GitHub at the
-following address:\
-
-[https://github.com/Lightstreamer/Lightstreamer-lib-client-java](https://github.com/Lightstreamer/Lightstreamer-lib-client-java).
+address [https://github.com/Lightstreamer/Lightstreamer-lib-client-java](https://github.com/Lightstreamer/Lightstreamer-lib-client-java).
 
 Updated the required version of the third-party Netty library.
 

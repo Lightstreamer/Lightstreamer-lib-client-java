@@ -8,10 +8,7 @@
 
 Made the library available on [Maven Central Repository](https://mvnrepository.com/artifact/com.lightstreamer/ls-javase-client).
 The new location will replace the old [Lightstreamer internal repository](https://www.lightstreamer.com/repo/maven).
-Moreover, the library is now open source, available on GitHub at the
-following address:\
-
-[https://github.com/Lightstreamer/Lightstreamer-lib-client-java](https://github.com/Lightstreamer/Lightstreamer-lib-client-java).
+Moreover, the library is now open source, available on GitHub at the address [https://github.com/Lightstreamer/Lightstreamer-lib-client-java](https://github.com/Lightstreamer/Lightstreamer-lib-client-java).
 
 Updated the required version of the third-party Netty library.
 
