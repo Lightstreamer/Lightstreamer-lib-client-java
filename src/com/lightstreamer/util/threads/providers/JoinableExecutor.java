@@ -1,0 +1,34 @@
+/*
+ * Copyright (c) 2004-2015 Weswit s.r.l., Via Campanini, 6 - 20124 Milano,
+ * Italy. All rights reserved. www.lightstreamer.com This software is the
+ * confidential and proprietary information of Weswit s.r.l. You shall not
+ * disclose such Confidential Information and shall use it only in accordance
+ * with the terms of the license agreement you entered into with Weswit s.r.l.
+ */
+package com.lightstreamer.util.threads.providers;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.RejectedExecutionException;
+
+/**
+ * Interface which defines a basic thread executor whose internal working
+ * threads are terminated if no task arrive within a specified keep-alive time.
+ *
+ */
+public interface JoinableExecutor extends Joinable {
+
+    /**
+     * Executes the given command at some time in the future.
+     * 
+     * @see Executor#execute(Runnable)
+     *
+     * @param command
+     *            the runnable task
+     * @throws RejectedExecutionException
+     *             if this task cannot be accepted for execution
+     * @throws NullPointerException
+     *             if command is null
+     */
+    void execute(Runnable task);
+
+}

@@ -173,8 +173,21 @@ dependencies {
 
 ## Building
 
-To build the library you need:
-- JDK version 8.
+### JavaSE client
+
+To build the Lightstreamer JavaSE client, ensure that you have the JDK version 8 or higher.
+Then, run the Gradle `build` task:
+
+```sh
+$ ./gradlew :ls-javase-client:build
+```
+
+After that, you can find all generated artifacts (library, javadocs, and source code) under the folder `javase-lib/build`.
+
+### Android client
+
+To build the Lightstreamer Android client you need:
+- JDK version 8 or higher
 - The *Android command line tools*.
 
 To install the Android command line tools, follow these steps:
@@ -189,17 +202,19 @@ where `<your_android_sdk_root>` is a folder in your system.
   $ ./sdkmanager --licenses
   ```
   
-Then, run the Gradle `build` task:
+Then, run the following commands:
 
 ```sh
-$ ./gradlew build
+$ ./gradlew :ls-android-client:preprocess
 ```
 
-After that, you can find all generated artifacts (library, javadocs, and source code) under the folders:
+```sh
+$ ./gradlew :ls-android-client:build
+```
 
-- `javase-lib`, for the Java SE library
-- `android-lib`, for the Android library
-- `android-compact lib`, for the Android "compact" library
+After that, you can find all generated artifacts (library, javadocs, and source code) under the folder `android-lib/build`.
+
+To build the Lightstreamer Android compact client, run the commands above substituting `ls-android-client` with `ls-android-client-compact`. The generated files are under the folder `android-compact-lib/build`.
 
 ## Compatibility
 

@@ -1,0 +1,248 @@
+
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+dependencies {
+    implementation 'io.netty:netty-codec-http:4.1.46.Final'
+    implementation 'io.netty:netty-handler:4.1.46.Final'
+    implementation 'io.netty:netty-handler-proxy:4.1.46.Final'
+    implementation 'com.lightstreamer:ls-log-adapter-java:1.0.2'
+    implementation 'com.cedarsoftware:json-io:4.10.0'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'com.google.android.gms:play-services:4.2.42'
+}
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 29
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    
+    lintOptions {
+    	disable 'Assert'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+            	srcDirs = ['preprocess/java']
+            	exclude '**/*JavaSE*'
+         	}
+         	manifest.srcFile '../common-lib/AndroidManifest.xml'
+        }
+    }
+}
+
+project.afterEvaluate{
+
+	def projectUrl = 'https://github.com/Lightstreamer/Lightstreamer-lib-client-java'
+		
+	publishing {
+        publications {
+            androidLibrary(MavenPublication) {
+                from components.release
+
+                artifact androidSourcesJar
+                artifact androidJavadocJar
+
+                pom {
+                    name = 'Lightstreamer Android Client SDK'
+                    description = 'Lightstreamer Android Client SDK'
+                    url = projectUrl
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                             name = 'support'
+	                         email = 'support@lightstreamer.com'
+    	                     organization = 'Lightstreamer'
+        	                 organizationUrl = 'https://www.lightstreamer.com'
+                        }
+                    }
+
+                    scm {
+                        connection = "scm:git:${projectUrl}.git"
+                        developerConnection = "scm:git:${projectUrl}.git"
+                        url = projectUrl
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = version.endsWith('SNAPSHOT') ? 'https://oss.sonatype.org/content/repositories/snapshots' : 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                credentials {
+                    username ossrhUsername
+                    password ossrhPassword
+                }
+            }
+        }
+
+        signing {
+            sign publishing.publications.androidLibrary
+        }
+    }
+}
+
+task preprocess(type: JavaExec) {
+	
+    doLast {
+        java.nio.file.Path srcTarget = java.nio.file.Paths.get(project.projectDir.absolutePath, "preprocess", "java").toAbsolutePath()
+        java.nio.file.Path baseDir = rootProject.projectDir.toPath()
+        
+        /* strip off Android parts */
+        java.nio.file.Paths.get(rootProject.projectDir.absolutePath, 'src').eachFileRecurse {
+        	def file = it.toFile()
+        	if (file.isDirectory()) {
+        		return
+        	}
+        	def contents = file.getText('UTF-8')
+        	// (?s) enables dotall mode 
+        	def m = contents =~ /(?s)\s*(\/\/)?\s*BEGIN_ANDROID_EXCLUDE.*?END_ANDROID_EXCLUDE/
+        	if (m) {
+        		contents = m.replaceAll('')
+        	}
+        	def out = baseDir.relativize(file.toPath())
+        	// drop src component
+        	out = out.subpath(1, out.nameCount)
+        	out = srcTarget.resolve(out).toFile()
+        	out.parentFile.mkdirs()
+        	out.write(contents, 'UTF-8')
+        }
+        
+        android.sourceSets.main.java.srcDirs = [srcTarget]
+    }
+    
+	classpath = files('../common-lib/encdec.jar')
+   	args '-c', '-e', "android_client ${project.version} build ${project.build}"
+   	standardOutput = new ByteArrayOutputStream()
+   	
+	doLast {
+		/* replace LS_cid */
+  		def cid = standardOutput.toString()
+  		def f1 = file('preprocess/java/com/lightstreamer/client/requests/CreateSessionRequest.java')
+  		def c1 = f1.getText('UTF-8').replace('pcYgxptg4pkpW38AK1x-onG39Do', cid)
+  		f1.write(c1, 'UTF-8')
+  		/* replace version and build number */
+  		def f2 = file('preprocess/java/com/lightstreamer/client/LightstreamerClient.java')
+  		def c2 = f2.getText('UTF-8')
+  			.replace('name_placeholder', 'android_client')
+  		  	.replace('version_placeholder', project.version)
+  		  	.replace('build_placeholder', project.build)
+  		   	.replace('extra_placeholder', '')
+  		f2.write(c2, 'UTF-8')
+	}
+}
+
+task preprocessJavadoc(type: Copy) {
+	dependsOn 'preprocess'
+	
+	from 'preprocess/java'
+	into 'preprocess/javadoc'
+    include '**/client/*.java'
+    exclude '**/client/Constants.java'
+    exclude '**/client/Internals.java'
+    include '**/mpn/AbstractMpnDevice.java'
+    include '**/mpn/MpnDeviceInterface.java'
+    include '**/mpn/MpnDeviceListener.java'
+    include '**/mpn/MpnSubscription.java'
+    include '**/mpn/MpnSubscriptionListener.java'
+    include '**/mpn/android/MpnDevice.java'
+    include '**/mpn/util/MpnBuilder.java'
+    
+    doLast {
+    	java.nio.file.Paths.get(project.projectDir.absolutePath, "preprocess", "javadoc").eachFileRecurse {
+			def file = it.toFile()
+			if (file.isFile()) {
+				/* exclude internal members */
+		    	def contents = file.getText('UTF-8')
+		    		.replace('public /* @exclude */', '')
+		    		.replace('protected /* @exclude */', '')
+		    		.replace('BEGIN_ANDROID_DOC_ONLY', '')
+		    		.replace('END_ANDROID_DOC_ONLY', '')
+		        /* replace links to logger docs */
+		        def log_version = "1.0.2"
+		        contents = contents.replace('log_javadoc_url_placeholder', "http://www.lightstreamer.com/repo/maven/com/lightstreamer/ls-log-adapter-java/${log_version}/ls-log-adapter-java-${log_version}-javadoc.jar%23")
+		    	file.write(contents, 'UTF-8')
+			}
+		}
+		
+    }
+}
+
+android.libraryVariants.all { variant ->
+
+	if (variant.name == "release") {
+	
+	    task("javadoc", type: Javadoc) {
+	    	dependsOn "compile${variant.name.capitalize()}Sources", 'preprocessJavadoc'
+	    	
+		    title "Lightstreamer Android Client SDK ${project.version} API Reference"
+		    if (project.hasProperty('javadocExe')) {
+		    	executable = javadocExe
+		    }
+		    source = ['preprocess/javadoc']
+		    options.encoding = 'UTF-8'
+		    options.author = false
+		    options.version = false
+		    options.memberLevel = JavadocMemberLevel.PUBLIC
+		    options.tags = [
+	    		'general_edition_note:a:Edition Note:', 
+	    		'lifecycle:a:Lifecycle:',
+	    		'beta:a:Beta version note:',
+	    		'incomplete:a:Beta version note:',
+	    		'notification:a:Related notifications:',
+	    		'default:a:Default value:']
+	    	options.overview '../common-lib/android_overview.html'
+	    	
+	        classpath += variant.javaCompileProvider.get().classpath
+	        classpath += files("${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar")
+	        classpath += project.files("$buildDir/intermediates/javac/${variant.name}/classes")
+	    }
+	    
+	    task androidJavadocJar(type: Jar, dependsOn: javadoc) {
+            archiveClassifier.set('javadoc')
+            from javadoc.destinationDir
+        }
+	}
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+task zipJavadoc(type: Zip) {
+	dependsOn 'javadoc'
+
+   	archiveFileName = "javadocs.zip"
+   	destinationDirectory = file("$buildDir/dist")
+   	from "$buildDir/docs/javadoc"
+}
+
+clean.doLast {
+	java.nio.file.Paths.get(project.projectDir.absolutePath, "preprocess").deleteDir()
+}
