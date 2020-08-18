@@ -90,7 +90,7 @@ public class LightstreamerClient {
   /**
    * Static method that permits to configure the logging system used by the library. The logging system 
    * must respect the 
-   * <a href="log_javadoc_url_placeholder/com/lightstreamer/log/LoggerProvider.html">LoggerProvider</a> 
+   * <a href="https://lightstreamer.com/api/ls-log-adapter-java/latest/com/lightstreamer/log/LoggerProvider.html">LoggerProvider</a> 
    * interface. A custom class can be used to wrap any third-party 
    * Java logging system. <BR>
    * If no logging system is specified, all the generated log is discarded. <BR>
@@ -121,7 +121,7 @@ public class LightstreamerClient {
    *  </li>
    * </ul>
    *
-   * @param provider A <a href="log_javadoc_url_placeholder/com/lightstreamer/log/LoggerProvider.html">LoggerProvider</a>
+   * @param provider A <a href="https://lightstreamer.com/api/ls-log-adapter-java/latest/com/lightstreamer/log/LoggerProvider.html">LoggerProvider</a>
    * instance that will be used to generate log messages by the library classes.
    */
   public static void setLoggerProvider(@Nullable LoggerProvider provider) {

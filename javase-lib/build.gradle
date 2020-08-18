@@ -105,7 +105,7 @@ task preprocessJavadoc(type: Copy) {
 		        }
 		        /* replace links to logger docs */
 		        def log_version = "1.0.2"
-		        contents = contents.replace('log_javadoc_url_placeholder', "http://www.lightstreamer.com/repo/maven/com/lightstreamer/ls-log-adapter-java/${log_version}/ls-log-adapter-java-${log_version}-javadoc.jar%23")
+		        contents = contents.replace('ls-log-adapter-java/latest/api', "ls-log-adapter-java/${log_version}/api")
 		    	file.write(contents, 'UTF-8')
 			}
 		}
