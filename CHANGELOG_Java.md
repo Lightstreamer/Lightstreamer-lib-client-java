@@ -1,4 +1,4 @@
-# Lightstreamer SDK for Java SE Clients (Unified API) Changelog
+# Lightstreamer SDK for Java SE Clients Changelog
 
 ## 4.3.4 build 1349
 

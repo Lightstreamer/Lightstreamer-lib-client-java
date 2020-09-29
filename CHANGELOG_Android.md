@@ -1,4 +1,4 @@
-# Lightstreamer SDK for Android Clients (Unified API) Changelog
+# Lightstreamer SDK for Android Clients Changelog
 
 
 ## 4.2.2 build 179
