@@ -1,5 +1,6 @@
 package com.lightstreamer.client.protocol;
 
+import com.lightstreamer.client.requests.DestroyRequest;
 import com.lightstreamer.client.requests.LightstreamerRequest;
 import com.lightstreamer.client.requests.RequestTutor;
 import com.lightstreamer.client.session.InternalConnectionOptions;
@@ -60,5 +61,10 @@ public class TextProtocolHttp extends TextProtocol {
     @Override
     public void setDefaultSessionId(String sessionId) {
         // http connections don't have a default session id
+    }
+
+    @Override
+    protected void forwardDestroyRequest(DestroyRequest request, RequestTutor tutor, RequestListener reqListener) {
+        // don't send destroy request when transport is http
     }
 }

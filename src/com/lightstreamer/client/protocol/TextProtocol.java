@@ -217,9 +217,10 @@ public abstract class TextProtocol implements Protocol {
             log.error("destroy request caused the error: " + code + " " + message + " - The error will be silently ignored.");
         }
     };
-    // destroy is always sent via HTTP
-    httpRequestManager.addRequest(request, tutor, reqListener);
+    forwardDestroyRequest(request, tutor, reqListener);
   }
+  
+  protected abstract void forwardDestroyRequest(DestroyRequest request, RequestTutor tutor, RequestListener reqListener);
   
   @Override
   public void sendMessageRequest(final MessageRequest request, final RequestTutor tutor) {

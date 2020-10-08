@@ -15,6 +15,7 @@ import com.lightstreamer.client.protocol.ControlResponseParser.ERRORParser;
 import com.lightstreamer.client.protocol.ControlResponseParser.ParsingException;
 import com.lightstreamer.client.protocol.ControlResponseParser.REQERRParser;
 import com.lightstreamer.client.protocol.ControlResponseParser.REQOKParser;
+import com.lightstreamer.client.requests.DestroyRequest;
 import com.lightstreamer.client.requests.LightstreamerRequest;
 import com.lightstreamer.client.requests.RequestTutor;
 import com.lightstreamer.client.session.InternalConnectionDetails;
@@ -121,5 +122,10 @@ public class TextProtocolWS extends TextProtocol {
     @Override
     public void setDefaultSessionId(String sessionId) {
         wsRequestManager.setDefaultSessionId(sessionId);
+    }
+
+    @Override
+    protected void forwardDestroyRequest(DestroyRequest request, RequestTutor tutor, RequestListener reqListener) {
+        wsRequestManager.addRequest(request, tutor, reqListener);
     }
 }

@@ -27,6 +27,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.util.CharsetUtil;
 
@@ -53,6 +54,12 @@ public class NettySocketHandler extends SimpleChannelInboundHandler<Object> impl
   private NettyInterruptionHandler interruptionHandler;
   private LineAssembler lineAssembler;
   private final AtomicReference<Channel> channelRef = new AtomicReference<>();
+  
+  /**
+   * The flag is false when the server sends the header "Connection: close"
+   * and it is true when the header is "Connection: keep-alive".
+   */
+  private volatile boolean keepalive = false;
   
   private void set(int status) {
    this.status = status;
@@ -122,13 +129,16 @@ public class NettySocketHandler extends SimpleChannelInboundHandler<Object> impl
   
   private void reuse(ChannelHandlerContext ctx) {
     
-    //System.out.println("Reuse socket " + ctx.channel());
+    if (! keepalive) {
+        closeChannel(ctx.channel());
+    }
     
     if (this.socketListener != null) {
       this.socketListener.onClosed();
     }
     this.socketListener = null;
     this.interruptionHandler = null;
+    this.keepalive = false;
     
     
     this.set(OPEN);
@@ -235,6 +245,8 @@ public class NettySocketHandler extends SimpleChannelInboundHandler<Object> impl
         error(ch);
         return;
       }
+      
+      keepalive = HttpUtil.isKeepAlive(response);
 
       for (String cookie : response.headers().getAll(HttpHeaderNames.SET_COOKIE)) {
           CookieHelper.saveCookies(uri, cookie);
@@ -257,7 +269,7 @@ public class NettySocketHandler extends SimpleChannelInboundHandler<Object> impl
       message(buf);
        
       if (chunk instanceof LastHttpContent) {
-        //http complete, go back to open so that we can be reused
+        //http complete, go back to open so that it can be reused
         reuse(ctx);
       }
         
@@ -266,6 +278,7 @@ public class NettySocketHandler extends SimpleChannelInboundHandler<Object> impl
   
   
 
+  @SuppressWarnings("null")
   @Override
   public synchronized void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
       Channel ch = ctx.channel();

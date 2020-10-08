@@ -29,7 +29,7 @@ public class DestroyRequest extends ControlRequest {
     
     this.session = sessionID;
     
-    this.addParameter("LS_session", sessionID);
+    //this.addParameter("LS_session", sessionID);
     
     if (closeReason != null) {
       this.addParameter("LS_cause", closeReason);

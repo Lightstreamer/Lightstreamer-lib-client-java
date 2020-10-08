@@ -1,4 +1,18 @@
-# Lightstreamer SDK for Java SE Clients (Unified API) Changelog
+# Lightstreamer SDK for Java SE Clients Changelog
+
+## 4.3.5 build 1350
+
+<i>Compatible with Lightstreamer Server since 7.0.</i><br>
+<i>Compatible with code developed with the previous version.</i><br>
+<i>Released on 8 Oct 2020</i>
+
+<!---id=3153--->Discontinued a notification to the Server of the termination of a HTTP streaming session.
+The notification could help the Server to detect closed connections in some cases, but in other cases it
+could give rise to bursts of new connections.
+
+<!---id=3159--->Fixed a bug on connection reuse that, under particular conditions, could have caused some
+connection attempts to fail.
+
 
 ## 4.3.4 build 1349
 

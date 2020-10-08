@@ -54,6 +54,9 @@ public class NettyRequestListener implements RequestListener {
     }
   }
 
+  /**
+   * Notifies the closing and releases the channel to the channel pool.
+   */
   @Override
   public void onClosed() {
     if (!this.closedCalled) {
