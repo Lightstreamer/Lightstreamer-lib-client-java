@@ -180,7 +180,7 @@ public class Subscription {
   private int tablePhase = 0;
   private SubscriptionManager manager;
   private SessionThread sessionThread;
-  private SnapshotManager snapshotManager;
+  private SnapshotManager[] snapshotByItem;
   
   
   
@@ -1563,7 +1563,6 @@ public class Subscription {
     this.subscriptionId  = subId;
     this.manager = manager;
     this.setPhase(WAITING);
-    this.snapshotManager = new SnapshotManager(isRequiredSnapshot, mode);
     
     if (log.isDebugEnabled()) {
       log.debug("Subscription "+subId+" ready to be sent to server");
@@ -1673,6 +1672,10 @@ public class Subscription {
 
     this.itemDescriptor.setSize(items);
     this.fieldDescriptor.setSize(fields);
+    this.snapshotByItem = new SnapshotManager[1 + items];
+    for (int i = 1; i <= items; i++) {
+        this.snapshotByItem[i] = new SnapshotManager(isRequiredSnapshot, mode);
+    }
     
     this.dispatcher.dispatchEvent(new SubscriptionListenerSubscriptionEvent());
     
@@ -1792,7 +1795,7 @@ public class Subscription {
     }
     
     String name = this.itemDescriptor.getName(item);
-    snapshotManager.endOfSnapshot();
+    this.snapshotByItem[item].endOfSnapshot();
     this.dispatcher.dispatchEvent(new SubscriptionListenerEndOfSnapshotEvent(name,item));
   }
 
@@ -1871,8 +1874,7 @@ public class Subscription {
     if(!this.checkStatusForUpdate()) {
       return;
     }
-    
-    snapshotManager.update();
+    this.snapshotByItem[item].update();
   
     SortedSet<Integer> changedFields = this.prepareChangedSet(args);
     
@@ -1906,7 +1908,8 @@ public class Subscription {
     
     
     String itemName = itemDescriptor.getName(item);
-    ItemUpdate updateObj = new ItemUpdate(itemName,item,snapshotManager.isSnapshot(),args,changedFields,fieldDescriptor); 
+    boolean snapshot = this.snapshotByItem[item].isSnapshot();
+    ItemUpdate updateObj = new ItemUpdate(itemName,item,snapshot,args,changedFields,fieldDescriptor); 
     
     this.dispatcher.dispatchEvent(new SubscriptionListenerItemUpdateEvent(updateObj));
     
@@ -1927,7 +1930,8 @@ public class Subscription {
     //this.manager = null;
     
     this.oldValuesByItem.clear(); 
-    this.oldValuesByKey.clear(); 
+    this.oldValuesByKey.clear();
+    this.snapshotByItem = null;
     
     //resets the schema size
     this.fieldDescriptor.setSize(0);

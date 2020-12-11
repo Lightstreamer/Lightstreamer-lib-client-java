@@ -1,5 +1,15 @@
 # Lightstreamer SDK for Java SE Clients Changelog
 
+## 4.3.6 build 1351
+
+<i>Compatible with Lightstreamer Server since 7.0.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
+<i>Released on 11 Dec 2020</i>
+
+<!---id=3168--->
+Fixed a bug introduced in version 4.2.2 and affecting the ItemUpdate.isSnapshot method. In case of a subscription of multiple items with a single Subscription object, the method returned true only for the first snapshot received. After that, the method returned false even when the updates were indeed snapshots.
+
+
 ## 4.3.5 build 1350
 
 <i>Compatible with Lightstreamer Server since 7.0.</i><br>
