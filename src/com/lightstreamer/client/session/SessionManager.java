@@ -321,6 +321,9 @@ public class SessionManager implements SessionListener {
       Status nextPH = isPolling ? (isHTTP ? Status.POLLING_HTTP : Status.POLLING_WS) : (isHTTP ? Status.STREAMING_HTTP : Status.STREAMING_WS);
       this.changeStatus(nextPH);
 
+      if (this.session != null) {
+          this.session.shutdown(false);
+      }
       this.prepareNewSessionInstance(isPolling,isComboForced,isHTTP, null, retryAgainIfStreamFails, false);
 
       this.session.createSession(currSessionId,reason,serverBusy);
