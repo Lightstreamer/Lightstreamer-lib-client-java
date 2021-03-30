@@ -301,8 +301,10 @@ public class NettyWebSocketProvider implements WebSocketProvider {
             listener.onMessage(message);
             Matcher mLoop = TextProtocol.LOOP_REGEX.matcher(message);
             Matcher mEnd = TextProtocol.END_REGEX.matcher(message);
-            if (mLoop.matches() || mEnd.matches()) {
+            if (mLoop.matches()) {
                 ch.release();
+            } else if (mEnd.matches()) {
+                ch.close();
             }
         }
 

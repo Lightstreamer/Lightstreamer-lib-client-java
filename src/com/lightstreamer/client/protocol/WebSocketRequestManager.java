@@ -141,7 +141,7 @@ public class WebSocketRequestManager implements RequestManager {
                 break;
 
             default:
-                assert false : state;
+                sessionLog.warn("Unexpected bind request in state " + state);
             }
         }
         // this request handle close the stream connection
@@ -171,8 +171,9 @@ public class WebSocketRequestManager implements RequestManager {
             controlRequestQueue.addLast(new PendingRequest(request, reqListener, tutor));
             
         } else {
-            // there is a transport, so openSocket was already called: the state is CONNECTED or CONNECTING 
-            switch (wsTransport.getState()) {
+            // there is a transport, so openSocket was already called: the state is CONNECTED or CONNECTING
+            InternalState state = wsTransport.getState();
+            switch (state) {
             case CONNECTED:
                 sendControlRequest(request, reqListener, tutor);
                 break;
@@ -183,7 +184,7 @@ public class WebSocketRequestManager implements RequestManager {
                 break;
                 
             default:
-                assert false;
+                sessionLog.warn("Unexpected request " + request.getRequestName() + " in state " + state);
             }
         }
     }

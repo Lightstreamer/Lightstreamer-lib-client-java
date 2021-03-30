@@ -1,5 +1,15 @@
 # Lightstreamer SDK for Android Clients Changelog
 
+
+## 4.2.5 build 183
+
+<i>Compatible with Lightstreamer Server since 7.1.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
+<i>Released on 29 Mar 2021</i>
+
+Fixed a bug on Websocket transport that could have caused the client to trigger the listener ClientListener.onServerError with error code 61. The bug didn't affect the so-called "compact" version.
+
+
 ## 4.2.4 build 181
 
 <i>Compatible with Lightstreamer Server since 7.1.</i><br/>

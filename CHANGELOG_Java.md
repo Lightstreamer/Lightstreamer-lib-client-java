@@ -1,5 +1,15 @@
 # Lightstreamer SDK for Java SE Clients Changelog
 
+
+## 4.3.7 build 1353
+
+<i>Compatible with Lightstreamer Server since 7.0.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
+<i>Released on 29 Mar 2021</i>
+
+Fixed a bug on Websocket transport that could have caused the client to trigger the listener ClientListener.onServerError with error code 61.
+
+
 ## 4.3.6 build 1351
 
 <i>Compatible with Lightstreamer Server since 7.0.</i><br/>
