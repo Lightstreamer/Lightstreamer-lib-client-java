@@ -7,7 +7,7 @@
 <i>Compatible with code developed with the previous version.</i><br/>
 <i>Released on 29 Mar 2021</i>
 
-Fixed a bug on Websocket transport that could have caused the client to trigger the listener ClientListener.onServerError with error code 61.
+Fixed a bug on Websocket transport that, upon a connection interruption, could have caused the client to trigger the listener ClientListener.onServerError with error code 61.
 
 
 ## 4.3.6 build 1351
