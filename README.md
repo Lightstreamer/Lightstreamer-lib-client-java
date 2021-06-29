@@ -139,7 +139,7 @@ As an example, you can see the class [MyFirebaseMessagingService](https://github
 
 To enable the internal client logger, create an instance of [LoggerProvider](https://sdk.lightstreamer.com/ls-log-adapter-java/1.0.2/api/com/lightstreamer/log/LoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/LightstreamerClient.html).
 
-### Javse SE
+### JavaSE
 
 ```java
 SystemOutLogProvider loggerProvider = new SystemOutLogProvider();
