@@ -5,6 +5,11 @@ plugins {
     id 'signing'
 }
 
+project.version = "4.2.5"
+project.ext.build = "183"
+def defaultCid = "gpGxttxdysogQz2FJ6LC3dXoqoH5UA4eXyyz3k"
+project.ext.cid = project.findProperty('LS_cid') ?: defaultCid
+
 dependencies {
     implementation 'io.netty:netty-codec-http:4.1.46.Final'
     implementation 'io.netty:netty-handler:4.1.46.Final'
@@ -107,7 +112,7 @@ project.afterEvaluate{
     }
 }
 
-task preprocess(type: JavaExec) {
+task preprocess {
 	
     doLast {
         java.nio.file.Path srcTarget = java.nio.file.Paths.get(project.projectDir.absolutePath, "preprocess", "java").toAbsolutePath()
@@ -136,22 +141,17 @@ task preprocess(type: JavaExec) {
         android.sourceSets.main.java.srcDirs = [srcTarget]
     }
     
-	classpath = files('../common-lib/encdec.jar')
-   	args '-c', '-e', "android_client ${project.version} build ${project.build}"
-   	standardOutput = new ByteArrayOutputStream()
-   	
 	doLast {
 		/* replace LS_cid */
-  		def cid = standardOutput.toString()
   		def f1 = file('preprocess/java/com/lightstreamer/client/requests/CreateSessionRequest.java')
-  		def c1 = f1.getText('UTF-8').replace('pcYgxptg4pkpW38AK1x-onG39Do', cid)
+  		def c1 = f1.getText('UTF-8').replace('mgQkwtwdysogQz2BJ4Ji%20kOj2Bg', project.ext.cid)
   		f1.write(c1, 'UTF-8')
   		/* replace version and build number */
   		def f2 = file('preprocess/java/com/lightstreamer/client/LightstreamerClient.java')
   		def c2 = f2.getText('UTF-8')
   			.replace('name_placeholder', 'android_client')
   		  	.replace('version_placeholder', project.version)
-  		  	.replace('build_placeholder', project.build)
+  		  	.replace('build_placeholder', project.ext.build)
   		   	.replace('extra_placeholder', '')
   		f2.write(c2, 'UTF-8')
 	}

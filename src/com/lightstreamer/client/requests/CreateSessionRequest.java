@@ -53,7 +53,7 @@ public class CreateSessionRequest extends SessionRequest {
     this.addParameter("LS_polling_millis", requestedPollingInterval);
     this.addParameter("LS_idle_millis", requestedIdleTimeout);
     
-    this.addParameter("LS_cid", "pcYgxptg4pkpW38AK1x-onG39Do");
+    this.addParameter("LS_cid", "mgQkwtwdysogQz2BJ4Ji%20kOj2Bg");
     
     if (options.getInternalMaxBandwidth() == 0) {
       // unlimited: just omit the parameter
