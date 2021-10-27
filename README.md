@@ -66,7 +66,7 @@ client.connect();
 ```
 
 For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/Subscription.html) instance is needed.
-A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see [Lightstreamer General Concepts](https://www.lightstreamer.com/docs/base/General%20Concepts.pdf)):
+A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see [Lightstreamer General Concepts](https://www.lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf)):
 
 ```java
 String[] items = { "item1","item2","item3" };
