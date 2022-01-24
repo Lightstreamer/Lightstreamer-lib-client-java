@@ -127,7 +127,7 @@ but this behavior is no longer configurable.
 <b>COMPATIBILITY NOTE:</b> <i>Existing code that tries to take control of the
 connection timeouts will no longer be obeyed, but we assume that the new policy will bring
 an overall improvement. Note that, when in CONNECTING state, the current timeout can be restored
-by issuing disconnect() and then connect().</i>
+by issuing disconnect() and then connect().</i><br/>
 As a result of the change, methods setConnectTimeout, getConnectTimeout and setCurrentConnectTimeout 
 of ConnectionOptions have been deprecated, as the setters have no effect and the getter
 is now equivalent to getRetryDelay.<br/>
@@ -677,7 +677,7 @@ with its getter/setter pair in ConnectionOptions, is exposed.
 <b>COMPATIBILITY NOTE:</b> <i>if the setConnectTimeout method is called
 by the client code, the given parameter must be modified to be a String. If the getConnectTimeout
 method is called by the client code its receiving variable must be converted to a String; moreover
-it is likely that getConnectTimeout calls should be replaced by getCurrentConnectTimeout ones.</i>
+it is likely that getConnectTimeout calls should be replaced by getCurrentConnectTimeout ones.</i><br/>
 See the docs for further details.
 
 
