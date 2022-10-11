@@ -100,7 +100,7 @@ public class TextProtocolWS extends TextProtocol {
         log.error("Closing the session because of unexpected error: " + message);
         try {
             ERRORParser parser = new ERRORParser(message);
-            forwardControlResponseError(parser.errorCode, parser.errorMsg, null);
+            forwardERROR(parser.errorCode, parser.errorMsg);
             
         } catch (ParsingException e) {
             onIllegalMessage(e.getMessage());

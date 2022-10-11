@@ -101,13 +101,6 @@ public abstract class TextProtocol implements Protocol {
   protected final int objectId;
   protected final Http httpTransport;
   
-  /**
-   * If the server sends PROGs, the client captures messages between two consecutive PROGs
-   * to ease debugging in case of mismatch between the server and the client counters.
-   */
-  private boolean messageCaptureEnabled;
-  private ArrayList<String> capturedMessages;
-  
   public TextProtocol(int objectId, SessionThread thread, InternalConnectionOptions options, Http httpTransport) {
     this.httpTransport = httpTransport;
     this.objectId = objectId;
@@ -120,13 +113,10 @@ public abstract class TextProtocol implements Protocol {
         @Override
         public void onError(int errorCode, String errorMessage) {
             log.error("The server has generated an error. The session will be closed");
-            forwardControlResponseError(errorCode, errorMessage, null);
+            forwardERROR(errorCode, errorMessage);
         }
     });
     this.reverseHeartbeatTimer = new ReverseHeartbeatTimer(thread, options);
-    /* */
-    this.messageCaptureEnabled = false;
-    this.capturedMessages = new ArrayList<>();
   }
   
   protected void setStatus(StreamStatus status) {
@@ -556,9 +546,6 @@ public abstract class TextProtocol implements Protocol {
       if (log.isDebugEnabled()) {
           log.debug("New message (" + objectId + "): " + message);
       }
-      if (messageCaptureEnabled) {
-          capturedMessages.add(message);
-      }
 
       switch (status) {
       case READING_STREAM:
@@ -747,7 +734,7 @@ public abstract class TextProtocol implements Protocol {
       if (currentProg == null) {
           currentProg = prog;
           if (currentProg > sessionProg) {
-              log.error("Received event prog higher than expected: " + prog + " " + sessionProg + " " + capturedMessages);
+              log.error("Received event prog higher than expected: " + prog + " " + sessionProg);
               session.onPROGCounterMismatch();
           }
       } else {
@@ -755,17 +742,14 @@ public abstract class TextProtocol implements Protocol {
           // these extra invocations of PROG can be enabled on the Server
           // through the <PROG_NOTIFICATION_GAP> private flag
           if (currentProg != prog) {
-              log.error("Received event prog different than expected: " + prog + " " + currentProg + " " + capturedMessages);
+              log.error("Received event prog different than expected: " + prog + " " + currentProg);
               session.onPROGCounterMismatch();
           }
           else if (prog != sessionProg) {
-              log.error("Received event prog different than actual: " + prog + " " + sessionProg + " " + capturedMessages);
+              log.error("Received event prog different than actual: " + prog + " " + sessionProg);
               session.onPROGCounterMismatch();
           }
       }
-      /* */
-      messageCaptureEnabled = true;
-      capturedMessages.clear();
   }
 
   private void processCONF(String message) {
@@ -1166,37 +1150,40 @@ public abstract class TextProtocol implements Protocol {
     }
   }
   
-  /**
-   * Manages REQERR/ERROR errors.
-   */
-  protected void forwardControlResponseError(int code, String message, BaseControlRequestListener<?> listener) {
+  protected void forwardREQERR(int code, String message, BaseControlRequestListener<?> listener) {
       if (code == 20) {
           session.onSyncError(ProtocolConstants.SYNC_RESPONSE);
           //Actually we're already END because
           //onSyncError will call errorEvent->closeSession->shutdown 
           //and finally stop on the protocol, thus this call is superfluous
           setStatus(StreamStatus.STREAM_CLOSED);
-      } else if (code == 11) {
+      } else if (code == 11 || code == 65 || code == 67) {
           // error 11 is managed as CONERR 21
-          session.onServerError(21, message);
-      } else if (listener != null && code != 65 /*65 is a fatal error*/) {
-          /*
-           * since there is a listener (because it is a REQERR message), 
-           * don't fall-back to fatal error case
-           */
+          if (code == 11) {
+              session.onServerError(21, message);    
+          } else {
+              session.onServerError(code, message);
+          }
+      } else if (listener != null) {
           listener.onError(code, message);
       } else {
-          /*
-           * fall-back case handles fatal errors, i.e. ERROR messages: 
-           * close current session, don't create a new session, notify client listeners
-           */
-          this.session.onServerError(code, message);
-          this.setStatus(StreamStatus.STREAM_CLOSED);
+          if (log.isWarnEnabled()) {
+              log.warn("Ignore error " + code + " " + message);    
+          }
       }
   }
   
+  protected void forwardERROR(int code, String message) {
+      /*
+       * close current session, don't create a new session, notify client listeners
+       */
+      this.session.onServerError(code, message);
+      this.setStatus(StreamStatus.STREAM_CLOSED);
+  }
+  
   protected final void onIllegalMessage(String description) {
-      forwardControlResponseError(61, description, null);
+      this.session.onServerError(61, description);
+      this.setStatus(StreamStatus.STREAM_CLOSED);
   }
   
   @Override
@@ -1378,11 +1365,11 @@ public abstract class TextProtocol implements Protocol {
                 
             } else if (parser instanceof REQERRParser) {
                 REQERRParser request = (REQERRParser) parser;
-                forwardControlResponseError(request.errorCode, request.errorMsg, this);
+                forwardREQERR(request.errorCode, request.errorMsg, this);
                 
             } else if (parser instanceof ERRORParser) {
                 ERRORParser request = (ERRORParser) parser;
-                forwardControlResponseError(request.errorCode, request.errorMsg, this);
+                forwardERROR(request.errorCode, request.errorMsg);
                 
             } else {
                 // should not happen

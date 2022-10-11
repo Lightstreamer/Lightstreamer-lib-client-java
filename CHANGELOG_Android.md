@@ -1,6 +1,18 @@
 # Lightstreamer SDK for Android Clients Changelog
 
 
+## 4.2.6 build 184
+
+<i>Compatible with Lightstreamer Server since 7.1.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
+<i>Released on 11 Oct 2022</i>
+
+Fixed a bug about message sending that, upon a message retransmission, could have caused the client to trigger ClientListener.onServerError with error code 32 or 33.
+
+<!--10/10/2022-->
+Fixed a bug that, upon a session recovery, could have caused a memory leak.
+
+
 ## 4.2.5 build 183
 
 <i>Compatible with Lightstreamer Server since 7.1.</i><br/>

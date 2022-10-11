@@ -1,6 +1,18 @@
 # Lightstreamer SDK for Java SE Clients Changelog
 
 
+## 4.3.8 build 1354
+
+<i>Compatible with Lightstreamer Server since 7.0.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
+<i>Released on 11 Oct 2022</i>
+
+Fixed a bug about message sending that, upon a message retransmission, could have caused the client to trigger ClientListener.onServerError with error code 32 or 33.
+
+<!--10/10/2022-->
+Fixed a bug that, upon a session recovery, could have caused a memory leak.
+
+
 ## 4.3.7 build 1353
 
 <i>Compatible with Lightstreamer Server since 7.0.</i><br/>

@@ -20,7 +20,7 @@ To add a dependency using Maven, use the following:
 <dependency>
   <groupId>com.lightstreamer</groupId>
   <artifactId>ls-javase-client</artifactId>
-  <version>4.3.4</version>
+  <version>4.3.8</version>
 </dependency>
 ```
 
@@ -28,7 +28,7 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-  implementation("com.lightstreamer:ls-javase-client:4.3.4")
+  implementation("com.lightstreamer:ls-javase-client:4.3.8")
 }
 ```
 
@@ -43,7 +43,7 @@ To add a dependency using Maven, use the following:
 <dependency>
   <groupId>com.lightstreamer</groupId>
   <artifactId>ls-android-client</artifactId>
-  <version>4.2.2</version>
+  <version>4.2.6</version>
 </dependency>
 ```
 
@@ -51,7 +51,7 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-  implementation("com.lightstreamer:ls-android-client:4.2.2")
+  implementation("com.lightstreamer:ls-android-client:4.2.6")
 }
 ```
 
