@@ -1,5 +1,8 @@
 # Lightstreamer Client SDK
 
+> ⚠️ This library has been superseded by the **Lightstreamer Client SDKs** based on [Haxe](https://haxe.org). <br>
+Learn more on the [🔥new project page🔥](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe).
+
 Lightstreamer Client SDK enables any JavaSE/Android application to communicate bidirectionally with a **Lightstreamer Server**. The API allows to subscribe to real-time data pushed by the server and to send any message to the server.
 
 The library offers automatic recovery from connection failures, automatic selection of the best available transport, and full decoupling of subscription and connection operations. It is responsible of forwarding the subscriptions to the Server and re-forwarding all the subscriptions whenever the connection is broken and then reopened.
