@@ -5,9 +5,9 @@ plugins {
     id 'signing'
 }
 
-project.version = "4.3.8"
-project.ext.build = "1354"
-def defaultCid = "pcYgxptg4pkpW39AN3U4hwLri8L7RB4eXyyz3k"
+project.version = "4.3.9"
+project.ext.build = "1355"
+def defaultCid = "pcYgxptg4pkpW39AN3V4hwLri8L7RC4eXyyz3m"
 project.ext.cid = project.findProperty('LS_cid') ?: defaultCid
 
 dependencies {

@@ -1,6 +1,6 @@
 # Lightstreamer Client SDK
 
-> ⚠️ This library will be superseded by the **Lightstreamer Client SDKs** based on [Haxe](https://haxe.org). <br>
+> ⚠️ This library is superseded by the **Lightstreamer Client SDKs** based on [Haxe](https://haxe.org). <br>
 Learn more on the [🔥new project page🔥](https://github.com/Lightstreamer/Lightstreamer-lib-client-haxe).
 
 Lightstreamer Client SDK enables any JavaSE/Android application to communicate bidirectionally with a **Lightstreamer Server**. The API allows to subscribe to real-time data pushed by the server and to send any message to the server.
@@ -23,7 +23,7 @@ To add a dependency using Maven, use the following:
 <dependency>
   <groupId>com.lightstreamer</groupId>
   <artifactId>ls-javase-client</artifactId>
-  <version>4.3.8</version>
+  <version>4.3.9</version>
 </dependency>
 ```
 
@@ -31,7 +31,7 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-  implementation("com.lightstreamer:ls-javase-client:4.3.8")
+  implementation("com.lightstreamer:ls-javase-client:4.3.9")
 }
 ```
 
@@ -46,7 +46,7 @@ To add a dependency using Maven, use the following:
 <dependency>
   <groupId>com.lightstreamer</groupId>
   <artifactId>ls-android-client</artifactId>
-  <version>4.2.6</version>
+  <version>4.2.7</version>
 </dependency>
 ```
 
@@ -54,13 +54,13 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-  implementation("com.lightstreamer:ls-android-client:4.2.6")
+  implementation("com.lightstreamer:ls-android-client:4.2.7")
 }
 ```
 
 ## Quickstart
 
-To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
+To connect to a Lightstreamer Server, a [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/4.3.9/com/lightstreamer/client/LightstreamerClient.html) object has to be created, configured, and instructed to connect to the Lightstreamer Server. 
 A minimal version of the code that creates a LightstreamerClient and connects to the Lightstreamer Server on *https://push.lightstreamer.com* will look like this:
 
 ```java
@@ -68,7 +68,7 @@ LightstreamerClient client = new LightstreamerClient("https://push.lightstreamer
 client.connect();
 ```
 
-For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/Subscription.html) instance is needed.
+For each subscription to be subscribed to a Lightstreamer Server a [Subscription](https://lightstreamer.com/api/ls-javase-client/4.3.9/com/lightstreamer/client/Subscription.html) instance is needed.
 A simple Subscription containing three items and two fields to be subscribed in *MERGE* mode is easily created (see [Lightstreamer General Concepts](https://www.lightstreamer.com/docs/ls-server/latest/General%20Concepts.pdf)):
 
 ```java
@@ -80,7 +80,7 @@ sub.setRequestedSnapshot("yes");
 client.subscribe(sub);
 ```
 
-Before sending the subscription to the server, usually at least one [SubscriptionListener](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/SubscriptionListener.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
+Before sending the subscription to the server, usually at least one [SubscriptionListener](https://lightstreamer.com/api/ls-javase-client/4.3.9/com/lightstreamer/client/SubscriptionListener.html) is attached to the Subscription instance in order to consume the real-time updates. The following code shows the values of the fields *stock_name* and *last_price* each time a new update is received for the subscription:
 
 ```java
 sub.addListener(new SubscriptionListener() {
@@ -99,7 +99,7 @@ Before you can use MPN services, you need to
 - create a Firebase project to connect to your Android app (read carefully the Firebase documentation about [Set up a Firebase Cloud Messaging client app on Android](https://firebase.google.com/docs/cloud-messaging/android/client));
 - configure the Lightstreamer MPN module (read carefully the section *5 Mobile and Web Push Notifications* in the [General Concepts guide](https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf)).
 
-After you have a Firebase project, you can create a [MPN device](https://lightstreamer.com/api/ls-android-client/latest/com/lightstreamer/client/mpn/android/MpnDevice.html), which represents a specific app running on a specific mobile device.
+After you have a Firebase project, you can create a [MPN device](https://lightstreamer.com/api/ls-android-client/4.2.7/com/lightstreamer/client/mpn/android/MpnDevice.html), which represents a specific app running on a specific mobile device.
 
 ```java
 FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -113,7 +113,7 @@ FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCom
 });
 ```
 
-To receive notifications, you need to subscribe to a [MPN subscription](https://lightstreamer.com/api/ls-android-client/latest/com/lightstreamer/client/mpn/MpnSubscription.html): it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
+To receive notifications, you need to subscribe to a [MPN subscription](https://lightstreamer.com/api/ls-android-client/4.2.7/com/lightstreamer/client/mpn/MpnSubscription.html): it contains subscription details and the listener needed to monitor its status. Real-time data is routed via native push notifications.
 
 ```java
 String[] items = { "item1","item2","item3" };
@@ -140,7 +140,7 @@ As an example, you can see the class [MyFirebaseMessagingService](https://github
 
 ## Logging
 
-To enable the internal client logger, create an instance of [LoggerProvider](https://lightstreamer.com/api/ls-log-adapter-java/1.0.2/com/lightstreamer/log/LoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/latest/com/lightstreamer/client/LightstreamerClient.html).
+To enable the internal client logger, create an instance of [LoggerProvider](https://lightstreamer.com/api/ls-log-adapter-java/1.0.2/com/lightstreamer/log/LoggerProvider.html) and set it as the default provider of [LightstreamerClient](https://lightstreamer.com/api/ls-javase-client/4.3.9/com/lightstreamer/client/LightstreamerClient.html).
 
 ### JavaSE
 
@@ -229,9 +229,9 @@ To build the Lightstreamer Android compact client, run the commands above substi
 
 - [Live demos](https://demos.lightstreamer.com/?p=lightstreamer&t=client&lclient=java_client&sclientjava_client=android&sclientjava_client=javase)
 
-- [JavaSE API Reference](https://lightstreamer.com/api/ls-javase-client/latest/)
+- [JavaSE API Reference](https://lightstreamer.com/api/ls-javase-client/4.3.9/)
 
-- [Android API Reference](https://www.lightstreamer.com/api/ls-android-client/latest/)
+- [Android API Reference](https://lightstreamer.com/api/ls-android-client/4.2.7/)
 
 - [Lightstreamer General Concepts](https://lightstreamer.com/docs/ls-server/7.1.1/General%20Concepts.pdf)
 

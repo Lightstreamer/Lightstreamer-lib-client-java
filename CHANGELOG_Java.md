@@ -1,6 +1,15 @@
 # Lightstreamer SDK for Java SE Clients Changelog
 
 
+## 4.3.9 build 1355
+
+<i>Compatible with Lightstreamer Server since 7.0.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
+<i>Released on 3 Aug 2023</i>
+
+Updated Netty to version 4.1.52 to fix the exception `io.netty.handler.codec.UnsupportedMessageTypeException: io.netty.handler.codec.http.websocketx.TextWebSocketFrame (expected: io.netty.buffer.ByteBuf)`. This exception could occur when a secure WebSocket connection had to pass through an HTTP proxy. The bug did not affect the other transports.
+
+
 ## 4.3.8 build 1354
 
 <i>Compatible with Lightstreamer Server since 7.0.</i><br/>
