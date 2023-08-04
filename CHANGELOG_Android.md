@@ -1,6 +1,15 @@
 # Lightstreamer SDK for Android Clients Changelog
 
 
+## 4.2.8 build 186
+
+<i>Compatible with Lightstreamer Server since 7.1.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
+<i>Released on 4 Aug 2023</i>
+
+Fixed the pom.xml, that still referenced Netty 4.1.46 instead of Netty 4.1.52.
+
+
 ## 4.2.7 build 185
 
 <i>Compatible with Lightstreamer Server since 7.1.</i><br/>

@@ -5,15 +5,15 @@ plugins {
     id 'signing'
 }
 
-project.version = "4.2.7"
-project.ext.build = "185"
-def defaultCid = "gpGxttxdysogQz2FJ6LE3dXoqoH5UC4eXyyz3o"
+project.version = "4.2.8"
+project.ext.build = "186"
+def defaultCid = "gpGxttxdysogQz2FJ6LF3dXoqoH5UD4eXyyz3q"
 project.ext.cid = project.findProperty('LS_cid') ?: defaultCid
 
 dependencies {
-    implementation 'io.netty:netty-codec-http:4.1.46.Final'
-    implementation 'io.netty:netty-handler:4.1.46.Final'
-    implementation 'io.netty:netty-handler-proxy:4.1.46.Final'
+    implementation 'io.netty:netty-codec-http:4.1.52.Final'
+    implementation 'io.netty:netty-handler:4.1.52.Final'
+    implementation 'io.netty:netty-handler-proxy:4.1.52.Final'
     implementation 'com.lightstreamer:ls-log-adapter-java:1.0.2'
     implementation 'com.cedarsoftware:json-io:4.10.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'

@@ -1,6 +1,15 @@
 # Lightstreamer SDK for Java SE Clients Changelog
 
 
+## 4.3.10 build 1356
+
+<i>Compatible with Lightstreamer Server since 7.0.</i><br/>
+<i>Compatible with code developed with the previous version.</i><br/>
+<i>Released on 4 Aug 2023</i>
+
+Fixed the pom.xml, that still referenced Netty 4.1.46 instead of Netty 4.1.52.
+
+
 ## 4.3.9 build 1355
 
 <i>Compatible with Lightstreamer Server since 7.0.</i><br/>
